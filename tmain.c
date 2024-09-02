@@ -83,16 +83,17 @@ void displayMemoryStats(int *frames, int totalFrames, Queue *queue) {
         if(frames[i] == -1) {
             printf("%12d | Free          | N/A        | N/A\n", i);
         }else{
-            QueueNode *current = queue->front;
-            while (current != NULL) {
-                for (int j = 0; j < current->process->num_pages; j++) {
-                    if (current->process->page_table[j] == i) {
-                        printf("%12d | %10d | %10d\n", i, current->process->process_id, j);
-                        break;
-                    }
-                }
-                current = current->next;
-            }
+            printf("%12d | Allocated     | %10d | %10d\n", i, frames[i], i); //yaha abhi mujhe page number print krvane ka logic likhna hai abhi galat hai ye
+            // QueueNode *current = queue->front;
+            // while (current != NULL) {
+            //     for (int j = 0; j < current->process->num_pages; j++) {
+            //         if (current->process->page_table[j] == i) {
+            //             printf("%12d | %10d | %10d\n", i, current->process->process_id, j);
+            //             break;
+            //         }
+            //     }
+            //     current = current->next;
+            // }
         }
     }
     printf("-------------------------------------------------------\n");
@@ -114,7 +115,6 @@ int allocateMemory(RAM *ram, Process *process) {
             start_frame = i;
             for(j = 0; j < frames_needed; j++){
                 ram->frames[i + j] = process->process_id;
-                // process->page_table[j].page_number = j;
                 process->page_table[j] = i + j;
             }
             printpagetable(process);
@@ -127,7 +127,6 @@ int allocateMemory(RAM *ram, Process *process) {
     for(int i = 0; i < NFRAMES && allocated_frames < frames_needed; i++){
         if(ram->frames[i] == -1){ 
             ram->frames[i] = process->process_id;
-            // process->page_table[allocated_frames].page_number = allocated_frames;
             process->page_table[allocated_frames] = i;
             allocated_frames++;
         }
