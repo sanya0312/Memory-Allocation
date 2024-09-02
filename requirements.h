@@ -20,7 +20,7 @@ typedef struct {
     int p_size;              // calculated size
     int num_pages;           
     int execution_time;      // Completion time
-    PageTableEntry *page_table;  // page table entry array
+    int* page_table;  // page table entry array
 } Process;
 
 typedef struct {

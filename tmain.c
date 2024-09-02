@@ -21,7 +21,7 @@ int calculatePages(int process_size) {
 
 void printpagetable(Process *process){
     for(int i = 0; i < process->num_pages; i++){
-        printf("%d %d\n", process->page_table[i].page_number, process->page_table[i].frame_number);
+        printf("%d %d\n", i, process->page_table[i]);
     }
 }
 
@@ -35,7 +35,7 @@ Process *createProcess(int process_id, int arrival_time, int process_size, int e
     new_process->execution_time = execution_time;
     printf("numpages %d\n", new_process->num_pages);
 
-    new_process->page_table = (PageTableEntry *)malloc(new_process->num_pages * sizeof(PageTableEntry));
+    new_process->page_table = (int *)malloc(new_process->num_pages * sizeof(int));
     // printpagetable(new_process);
     return new_process;
 }
@@ -84,10 +84,10 @@ void displayMemoryStats(int *frames, int totalFrames, Queue *queue) {
             printf("%12d | Free          | N/A        | N/A\n", i);
         }else{
             QueueNode *current = queue->front;
-            while(current != NULL){
+            while (current != NULL) {
                 for (int j = 0; j < current->process->num_pages; j++) {
-                    if (current->process->page_table[j].frame_number == i) {
-                        printf("%10d | Allocated     | %10d | %12d\n", i, current->process->page_table[j].page_number, current->process->process_id);
+                    if (current->process->page_table[j] == i) {
+                        printf("%12d | %10d | %10d\n", i, current->process->process_id, j);
                         break;
                     }
                 }
@@ -114,8 +114,8 @@ int allocateMemory(RAM *ram, Process *process) {
             start_frame = i;
             for(j = 0; j < frames_needed; j++){
                 ram->frames[i + j] = process->process_id;
-                process->page_table[j].page_number = j;
-                process->page_table[j].frame_number = i + j;
+                // process->page_table[j].page_number = j;
+                process->page_table[j] = i + j;
             }
             printpagetable(process);
             printf("starting %d ending %d",start_frame, rampointer);
@@ -127,8 +127,8 @@ int allocateMemory(RAM *ram, Process *process) {
     for(int i = 0; i < NFRAMES && allocated_frames < frames_needed; i++){
         if(ram->frames[i] == -1){ 
             ram->frames[i] = process->process_id;
-            process->page_table[allocated_frames].page_number = allocated_frames;
-            process->page_table[allocated_frames].frame_number = i;
+            // process->page_table[allocated_frames].page_number = allocated_frames;
+            process->page_table[allocated_frames] = i;
             allocated_frames++;
         }
         printpagetable(process);
