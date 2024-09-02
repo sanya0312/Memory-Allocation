@@ -3,8 +3,13 @@
 #include <string.h>
 #include "requirements.h"
 
+int rampointer = 16;
+
 void initializeRAM(RAM *ram) {
-    for (int i = 0; i < NFRAMES; i++) {
+    for (int i = 0; i < 16; i++){
+        ram->frames[i] = 0; // assigned to os
+    }
+    for (int i = 16; i < NFRAMES; i++) {
         ram->frames[i] = -1; // initializing all frames to free
     }
 }
@@ -12,6 +17,12 @@ void initializeRAM(RAM *ram) {
 //calculate p_size
 int calculatePages(int process_size) {
     return ((process_size + PAGE_SIZE - 1) / PAGE_SIZE) * PAGE_SIZE;
+}
+
+void printpagetable(Process *process){
+    for(int i = 0; i < process->num_pages; i++){
+        printf("%d %d\n", process->page_table[i].page_number, process->page_table[i].frame_number);
+    }
 }
 
 Process *createProcess(int process_id, int arrival_time, int process_size, int execution_time) {
@@ -22,9 +33,10 @@ Process *createProcess(int process_id, int arrival_time, int process_size, int e
     new_process->p_size = calculatePages(process_size);
     new_process->num_pages = new_process->p_size / PAGE_SIZE;
     new_process->execution_time = execution_time;
+    printf("numpages %d\n", new_process->num_pages);
 
     new_process->page_table = (PageTableEntry *)malloc(new_process->num_pages * sizeof(PageTableEntry));
-
+    // printpagetable(new_process);
     return new_process;
 }
 
@@ -51,21 +63,31 @@ Process *dequeueProcess(Queue *queue) {
     return process;
 }
 
+
+// void printqueue(Queue *qu){
+//     while(qu->front != NULL){
+//         QueueNode* temp = qu->front;
+//         Process *process = temp->process;
+//         int id = process->process_id;
+//         printf("id = %d\n", id);
+//         dequeueProcess(qu);
+//     }
+// }
+
 void displayMemoryStats(int *frames, int totalFrames, Queue *queue) {
     printf("\n--- Memory Allocation Stats ---\n");
-    printf("Process ID | Page Number | Frame Number\n");
-    printf("---------------------------------------\n");
+    printf("Frame Number | Memory Status | Page Number | Process ID\n");
+    printf("-------------------------------------------------------\n");
 
     for (int i = 0; i < totalFrames; i++) {
         if(frames[i] == -1) {
-            printf("%12d | Free       | N/A\n", i);
+            printf("%12d | Free          | N/A        | N/A\n", i);
         }else{
             QueueNode *current = queue->front;
             while(current != NULL){
-                printf("inside the while loop\n");
                 for (int j = 0; j < current->process->num_pages; j++) {
                     if (current->process->page_table[j].frame_number == i) {
-                        printf("%10d | %10d | %12d\n", current->process->process_id, current->process->page_table[j].page_number, i);
+                        printf("%10d | Allocated     | %10d | %12d\n", i, current->process->page_table[j].page_number, current->process->process_id);
                         break;
                     }
                 }
@@ -73,12 +95,16 @@ void displayMemoryStats(int *frames, int totalFrames, Queue *queue) {
             }
         }
     }
-    printf("---------------------------------------\n");
+    printf("-------------------------------------------------------\n");
 }
+
 int allocateMemory(RAM *ram, Process *process) {
     int frames_needed = process->num_pages;
     int start_frame = -1;
+
     // Check contiguous
+    printf("frames needed %d \n", frames_needed);
+
     for(int i = 0; i <= NFRAMES - frames_needed; i++){
         int j;
         for(j = 0; j < frames_needed; j++) {
@@ -91,6 +117,8 @@ int allocateMemory(RAM *ram, Process *process) {
                 process->page_table[j].page_number = j;
                 process->page_table[j].frame_number = i + j;
             }
+            printpagetable(process);
+            printf("starting %d ending %d",start_frame, rampointer);
             return 1; 
         }
     }
@@ -103,6 +131,8 @@ int allocateMemory(RAM *ram, Process *process) {
             process->page_table[allocated_frames].frame_number = i;
             allocated_frames++;
         }
+        printpagetable(process);
+        printf("starting %d ending %d",start_frame, rampointer);
     }
 
     return (allocated_frames == frames_needed) ? 1 : 0; 
@@ -115,6 +145,7 @@ void freeMemory(RAM *ram, Process *process) {
         }
     }
 }
+
 void simulateProcesses(Queue *queue, RAM *ram) {
     int current_time = 0;
     
@@ -134,7 +165,7 @@ void simulateProcesses(Queue *queue, RAM *ram) {
         freeMemory(ram, process);
         free(process->page_table);
         free(process);
-        displayMemoryStats(ram->frames, NFRAMES, queue);
+        // displayMemoryStats(ram->frames, NFRAMES, queue);
     }
 }
 
@@ -143,8 +174,7 @@ int main() {
     initializeRAM(&ram);
     Queue queue = {NULL, NULL};
     while (1) {
-        int process_id, arrival_time,execution_time;
-        int process_size;
+        int process_id, arrival_time, execution_time, process_size;
         char input[10];
         printf("Enter the details (id, arrival_time, size, completion_time) or type 'exit': ");
         scanf("%s", input);
@@ -154,6 +184,7 @@ int main() {
         Process *new_process = createProcess(process_id, arrival_time, process_size, execution_time);
         enqueueProcess(&queue, new_process);
     }
+    // printqueue(&queue);
     simulateProcesses(&queue, &ram);
     return 0;
 }

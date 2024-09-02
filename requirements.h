@@ -5,6 +5,7 @@
 #define PAGE_SIZE 8  
 #define RAM_SIZE 1024 
 #define NFRAMES RAM_SIZE/PAGE_SIZE
+
 // page table entry ka structure
 typedef struct {
     int page_number;  // Page number of the process
@@ -21,7 +22,6 @@ typedef struct {
     int execution_time;      // Completion time
     PageTableEntry *page_table;  // page table entry array
 } Process;
-
 
 typedef struct {
     int frames[NFRAMES]; // frames in RAM array
