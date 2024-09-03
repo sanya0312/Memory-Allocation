@@ -6,25 +6,27 @@
 #define RAM_SIZE 1024 
 #define NFRAMES RAM_SIZE/PAGE_SIZE
 
-// page table entry ka structure
+extern int last_process_id;
+
+// Frame structure to store process ID and page number
 typedef struct {
-    int page_number;  // Page number of the process
-    int frame_number; // Frame number in RAM to which the page is mapped
-} PageTableEntry;
+    int process_id;  // ID of the process using this frame
+    int page_number; // Page number within the process
+} Frame;
 
 // process details
 typedef struct {
     int process_id;          
     int arrival_time;        // Arrival time
     int process_size;        // Actual process size
-    int p_size;              // calculated size
+    int p_size;              // Calculated size
     int num_pages;           
     int execution_time;      // Completion time
-    int* page_table;  // page table entry array
+    int* page_table;         // Page table entry array
 } Process;
 
 typedef struct {
-    int frames[NFRAMES]; // frames in RAM array
+    Frame frames[NFRAMES]; // Array of frames in RAM
 } RAM;
 
 // Queue for FIFO
