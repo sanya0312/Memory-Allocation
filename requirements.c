@@ -17,8 +17,12 @@ void initializeRAM(RAM *ram) {
     }
 }
 
-int calculatePages(int process_size) {
-    return ((process_size + PAGE_SIZE - 1) / PAGE_SIZE) * PAGE_SIZE;
+// int calculatePages(int process_size) {
+//     return ((process_size + PAGE_SIZE - 1) / PAGE_SIZE) * PAGE_SIZE;
+// }
+
+int maximum(int a, int b){
+    return a > b ? a : b;
 }
 
 Process* createProcess(int arrival_time, int process_size, int execution_time) {
@@ -29,7 +33,8 @@ Process* createProcess(int arrival_time, int process_size, int execution_time) {
     new_process->p_size = (process_size + PAGE_SIZE - 1) / PAGE_SIZE; // Round up page size
     new_process->num_pages = new_process->p_size;
     new_process->execution_time = execution_time;
-    new_process->completion_time = arrival_time + execution_time;  // Time when the process completes
+    new_process->completion_time = maximum(current_time, arrival_time) + execution_time;  // Time when the process completes
+    current_time = new_process->completion_time;
     new_process->page_table = (int *)malloc(new_process->num_pages * sizeof(int));
     return new_process;
 }
@@ -132,11 +137,33 @@ void printQueueState(Queue *queue) {
 }
 
 void simulateProcesses(Queue *queue, RAM *ram) {
+    current_time = 0;
     while (queue->front != NULL && current_time <= 100) {  // Run simulation until queue is empty or time limit reached
         printf("\nCurrent Time: %d\n", current_time);
 
-        // Allocate memory for processes arriving at current time
         QueueNode *current_node = queue->front;
+        // Free memory for processes completing at current time
+        
+        QueueNode *prev_node = NULL;
+        while (current_node != NULL) {
+            Process *process = current_node->process;
+            if (process->completion_time == current_time) {
+                printf("Freeing memory for Process ID: %d\n", process->process_id);
+                freeMemory(ram, process);
+                free(process->page_table);
+                Process* completed_process = dequeueProcess(queue);  // Remove the completed process from the queue
+                if (completed_process != NULL) {
+                    free(completed_process);
+                }
+                current_node = (prev_node != NULL) ? prev_node->next : queue->front;
+            } else {
+                prev_node = current_node;
+                current_node = current_node->next;
+            }
+        }
+
+        current_node = queue->front;
+        // Allocate memory for processes arriving at current time
         while (current_node != NULL) {
             Process *process = current_node->process;
             if (process->arrival_time == current_time) {
@@ -154,26 +181,6 @@ void simulateProcesses(Queue *queue, RAM *ram) {
                 }
             }
             current_node = current_node->next;
-        }
-
-        // Free memory for processes completing at current time
-        current_node = queue->front;
-        QueueNode *prev_node = NULL;
-        while (current_node != NULL) {
-            Process *process = current_node->process;
-            if (process->completion_time == current_time) {
-                printf("Freeing memory for Process ID: %d\n", process->process_id);
-                freeMemory(ram, process);
-                free(process->page_table);
-                Process* completed_process = dequeueProcess(queue);  // Remove the completed process from the queue
-                if (completed_process != NULL) {
-                    free(completed_process);
-                }
-                current_node = (prev_node != NULL) ? prev_node->next : queue->front;
-            } else {
-                prev_node = current_node;
-                current_node = current_node->next;
-            }
         }
 
         // Display memory stats at each second
