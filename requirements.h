@@ -11,10 +11,9 @@
 
 extern int last_process_id;
 
-// Frame structure to store process ID and page number
 typedef struct {
-    int process_id;  // ID of the process using this frame
-    int page_number; // Page number within the process
+    int process_id;  // ID of the process using this frame (-1 : free, 0 : Operating System)
+    int page_number; 
 } Frame;
 
 // process details
@@ -33,7 +32,7 @@ typedef struct {
     Frame frames[NFRAMES]; // Array of frames in RAM
 } RAM;
 
-// Queue for FIFO
+// Nodes of queue
 typedef struct QueueNode {
     Process *process;
     struct QueueNode *next;
@@ -46,13 +45,19 @@ typedef struct {
 } Queue;
 
 void initializeRAM(RAM *ram);
-int calculatePages(int process_size);
+
+// process management
 Process* createProcess(int arrival_time, int process_size, int execution_time);
 void enqueueProcess(Queue *queue, Process *process);
 Process *dequeueProcess(Queue *queue);
-void displayMemoryStats(RAM *ram);
+
+// memory management
 int allocateMemory(RAM *ram, Process *process);
 void freeMemory(RAM *ram, Process *process);
+
+// simulation
+void displayMemoryStats(RAM *ram);
 void simulateProcesses(Queue *queue, RAM *ram);
 void printQueue(Queue *queue);
+
 #endif

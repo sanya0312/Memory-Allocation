@@ -17,17 +17,13 @@ void initializeRAM(RAM *ram) {
     }
 }
 
-// int calculatePages(int process_size) {
-//     return ((process_size + PAGE_SIZE - 1) / PAGE_SIZE) * PAGE_SIZE;
-// }
-
 int maximum(int a, int b){
     return a > b ? a : b;
 }
 
 Process* createProcess(int arrival_time, int process_size, int execution_time) {
     Process *new_process = (Process *)malloc(sizeof(Process));
-    new_process->process_id = ++last_process_id;  // Assign a unique process ID automatically
+    new_process->process_id = ++last_process_id;  // unique process ID assignment
     new_process->arrival_time = arrival_time;
     new_process->process_size = process_size;
     new_process->p_size = (process_size + PAGE_SIZE - 1) / PAGE_SIZE; // Round up page size
@@ -172,12 +168,6 @@ void simulateProcesses(Queue *queue, RAM *ram) {
                     printf("Memory allocated to Process ID: %d\n", process->process_id);
                 } else {
                     printf("Memory allocation failed for Process ID: %d\n", process->process_id);
-                    // Dequeue the failed process and free it
-                    // Process* failed_process = dequeueProcess(queue);
-                    // if (failed_process != NULL) {
-                    //     free(failed_process->page_table);
-                    //     free(failed_process);
-                    // }
                 }
             }
             current_node = current_node->next;
@@ -186,7 +176,7 @@ void simulateProcesses(Queue *queue, RAM *ram) {
         // Display memory stats at each second
         displayMemoryStats(ram);
 
-        // Print queue state for debugging
+        // Print queue state 
         printQueueState(queue);
 
         sleep(1);  // Simulate 1 second delay
