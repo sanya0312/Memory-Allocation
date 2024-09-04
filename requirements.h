@@ -1,3 +1,6 @@
+#ifndef REQUIREMENTS_H
+#define REQUIREMENTS_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,7 +24,8 @@ typedef struct {
     int process_size;        // Actual process size
     int p_size;              // Calculated size
     int num_pages;           
-    int execution_time;      // Completion time
+    int execution_time;
+    int completion_time;      // Completion time
     int* page_table;         // Page table entry array
 } Process;
 
@@ -40,3 +44,15 @@ typedef struct {
     QueueNode *front;
     QueueNode *rear;
 } Queue;
+
+void initializeRAM(RAM *ram);
+int calculatePages(int process_size);
+Process* createProcess(int arrival_time, int process_size, int execution_time);
+void enqueueProcess(Queue *queue, Process *process);
+Process *dequeueProcess(Queue *queue);
+void displayMemoryStats(RAM *ram);
+int allocateMemory(RAM *ram, Process *process);
+void freeMemory(RAM *ram, Process *process);
+void simulateProcesses(Queue *queue, RAM *ram);
+void printQueue(Queue *queue);
+#endif
