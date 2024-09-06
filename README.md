@@ -33,7 +33,7 @@ The Virtual Memory Simulator is a simulation tool that demonstrates memory manag
 To compile the program, use the following command:
 
 ```sh
-gcc -o simulator main.c requirements.c
+gcc -o simulator main.c -L. myLibrary.a
 ```
 
 ## Execution
