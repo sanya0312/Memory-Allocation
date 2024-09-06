@@ -41,10 +41,7 @@ void Test2(){
     Process *p1 = createProcess(0, 500, 3);
     Process *p2 = createProcess(2, 200, 2);
     Process *p3 = createProcess(2, 150, 4);
-    Process *p4 = createProcess(4, 705, 2);
-    Process *p5 = createProcess(10, 500, 3);
-    Process *p6 = createProcess(12, 100, 2);
-    Process *p7 = createProcess(16, 1024, 1);
+    Process *p4 = createProcess(4, 705, 0);
 
     enqueueProcess(&queue, p1);
     enqueueProcess(&queue, p2);

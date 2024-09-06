@@ -182,5 +182,7 @@ void simulateProcesses(Queue *queue, RAM *ram) {
         sleep(1);  // Simulate 1 second delay
         current_time++;  // Increment simulated time
     }
+    current_time = 0;
+    last_process_id = 0;
 }
 
