@@ -1,8 +1,8 @@
-# Virtual Process Simulation
+# Virtual Process Simulator
 
 ## Overview
 
-The Virtual OS Manager is a simulation tool that demonstrates memory management techniques used in operating systems. It manages processes and allocates memory dynamically, simulating both contiguous and non-contiguous memory allocation methods.
+The Virtual Memory Simulator is a simulation tool that demonstrates memory management techniques used in operating systems. It manages processes and allocates memory dynamically, simulating both contiguous and non-contiguous memory allocation methods.
 
 ## Components
 
@@ -33,7 +33,7 @@ The Virtual OS Manager is a simulation tool that demonstrates memory management 
 To compile the program, use the following command:
 
 ```sh
-gcc -o virtual_os_manager main.c requirements.c
+gcc -o simulator main.c requirements.c
 ```
 
 ## Execution
@@ -41,7 +41,7 @@ gcc -o virtual_os_manager main.c requirements.c
 To run the simulation, execute the compiled binary:
 
 ```sh
-./virtual_os_manager
+./simulator
 ```
 
 ## Testing
