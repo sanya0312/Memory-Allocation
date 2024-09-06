@@ -54,8 +54,8 @@ A test file is included to validate the simulation's functionality. It contains 
 Compile and run the test file to ensure the accuracy of the simulation.
 
 ```sh
-gcc -o test_program test_file.c requirements.c
-./test_program
+gcc -o simulatedTest test.c -L. myLibrary.a
+./simulatedTest
 ```
 
 ## Usage
