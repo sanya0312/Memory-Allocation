@@ -20,11 +20,20 @@ The Virtual Memory Simulator is a simulation tool that demonstrates memory manag
    - **Queue State Display**: Prints the state of the process queue.
    - **Simulation Execution**: Simulates the processes over time, allocating and freeing memory as processes arrive and complete.
 
+## Standard Libraries
+
+The project makes use of the following standard libraries:
+
+- **<stdio.h>**: Provides the core input and output functions such as `printf` and `scanf`.
+- **<stdlib.h>**: Includes functions for memory allocation (`malloc`, `free`), process control (`exit`), and other utility functions.
+- **<string.h>**: Contains functions for manipulating strings and memory, for eg. `strcmp`.
+- **<unistd.h>**: Used for functions like `sleep()` to add delays during the simulation.
+
 ## Files
 
-- `requirements.h`: Header file containing declarations of data structures and functions.
-- `requirements.c`: Contains implementations of the functions declared in `requirements.h`.
-- `main.c`: Contains the main program logic, including process creation, memory allocation, and simulation.
+- **`requirements.h`**: Header file containing declarations of data structures and functions.
+- **`requirements.c`**: Contains the main logic and implementations of the functions declared in `requirements.h`, including process creation, memory allocation, and simulation.
+- **`main.c`**: Serves as the entry point for the program and handles calling functions for process creation, memory management, and simulation.
 
 ## Compilation and Execution
 
@@ -33,7 +42,7 @@ The Virtual Memory Simulator is a simulation tool that demonstrates memory manag
 To compile the program, use the following command:
 
 ```sh
-gcc -o simulator main.c requirements.c
+gcc -o simulator main.c -L. myLibrary.a
 ```
 
 ## Execution
@@ -54,8 +63,8 @@ A test file is included to validate the simulation's functionality. It contains 
 Compile and run the test file to ensure the accuracy of the simulation.
 
 ```sh
-gcc -o test_program test_file.c requirements.c
-./test_program
+gcc -o simulatedTest test.c -L. myLibrary.a
+./simulatedTest
 ```
 
 ## Usage
@@ -100,6 +109,12 @@ gcc -o test_program test_file.c requirements.c
 1. **Run the Program**: Execute the program to start the input loop.
 2. **Enter Process Details**: Provide arrival time, process size, and execution time for each process.
 3. **Simulation**: After adding all processes, the simulation will start, showing memory allocation and queue status updates.
+
+## Future Scope
+
+The project can be further enhanced by incorporating the following features:
+* **Different Types of Process Scheduling**: Implementing various scheduling algorithms such as Round Robin, Shortest Job First (SJF), Priority Scheduling, etc., to simulate a more realistic OS environment.
+* **Page Swapping with Different Page Replacement Algorithms**: Introducing the concept of page swapping to handle memory management more dynamically. Future implementations can include additional page replacement algorithms like Least Recently Used (LRU), Optimal Page Replacement.
 
 ## Notes
 
