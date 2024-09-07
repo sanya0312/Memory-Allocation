@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "requirements.h"
 
-void Test1(){
+void NonContiguous(){
     Queue queue;
     queue.front = NULL;
     queue.rear = NULL;
@@ -31,7 +31,7 @@ void Test1(){
     printf("-------------------------------------------------------\n\n\n");
 }
 
-void Test2(){
+void Failed_Allocation(){
     Queue queue;
     queue.front = NULL;
     queue.rear = NULL;
@@ -60,7 +60,7 @@ void Test2(){
 }
 
 int main() {
-    Test1();
-    Test2();
+    NonContiguous();
+    Failed_Allocation();
     return 0;
 }

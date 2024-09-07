@@ -25,6 +25,10 @@ int main() {
 
         printf("Process Size (in KB): ");
         scanf("%d", &process_size);
+        if(process_size > 896) {
+            printf("Memory allocation failed.\n");
+            continue;
+        }
 
         printf("Execution Time (in seconds): ");
         scanf("%d", &execution_time);
