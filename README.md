@@ -79,7 +79,7 @@ gcc -o simulatedTest test.c -L. myLibrary.a
 - **For Linux:**
 
 ```sh
-gcc -o simulatedTest test.c -L myLibraryLinux.a
+gcc -o simulatedTest test.c -L. myLibraryLinux.a
 ```
 
 To run the test file, execute the binary:
