@@ -41,8 +41,15 @@ The project makes use of the following standard libraries:
 
 To compile the program, use the following command:
 
+- **For Windows:**
+
 ```sh
 gcc -o simulator main.c -L. myLibrary.a
+```
+- **For Linux:**
+
+```sh
+gcc -o simulator main.c -L. myLibraryLinux.a
 ```
 
 ## Execution
@@ -60,10 +67,24 @@ A test file is included to validate the simulation's functionality. It contains 
 - **Test1**: Simulates processes with various sizes and arrival times that shows the complete simulation.
 - **Test2**: Tests with a range of process sizes and execution times, including edge cases which includes failure of memory allocation.
 
-Compile and run the test file to ensure the accuracy of the simulation.
+### Compilation and Execution
+To compile and run the test file to ensure the accuracy of the simulation, use the following commands.
+
+- **For Windows:**
 
 ```sh
 gcc -o simulatedTest test.c -L. myLibrary.a
+```
+
+- **For Linux:**
+
+```sh
+gcc -o simulatedTest test.c -L myLibraryLinux.a
+```
+
+To run the test file, execute the binary:
+
+```sh
 ./simulatedTest
 ```
 
@@ -121,4 +142,3 @@ The project can be further enhanced by incorporating the following features:
 - The simulation uses a fixed number of frames (1024 KB) and page size (8 KB).
 - Contiguous allocation is attempted first; if it fails, non-contiguous allocation is used.
 - Memory allocation failures are handled by cleaning up any allocated memory and continuing the simulation.
-
